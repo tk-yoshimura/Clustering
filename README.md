@@ -12,7 +12,7 @@
 - This library does not change the environment at all.
 
 ## Licence
-[MIT](https://github.com/tk-yoshimura/Clustering/blob/master/LICENSE)
+[MIT](https://github.com/tk-yoshimura/Clustering/blob/main/LICENSE)
 
 ## Author
 
