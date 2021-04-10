@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Algebra;
+using System;
 using System.Collections.ObjectModel;
-using Algebra;
 
 namespace Clustering {
     /// <summary>逐次最小問題最適化法</summary>
@@ -41,20 +41,20 @@ namespace Clustering {
 
             int changed_count = 0;
             bool examine_all = true;
-            while(changed_count > 0 || examine_all) {
+            while (changed_count > 0 || examine_all) {
                 changed_count = 0;
-                if(examine_all) {
-                    for(int i = 0; i < vectors; i++)
+                if (examine_all) {
+                    for (int i = 0; i < vectors; i++)
                         changed_count += ExamineExample(i);
                 }
                 else {
-                    for(int i = 0; i < vectors; i++)
-                        if(a[i] != 0 && a[i] != cost)
+                    for (int i = 0; i < vectors; i++)
+                        if (a[i] != 0 && a[i] != cost)
                             changed_count += ExamineExample(i);
                 }
-                if(examine_all)
+                if (examine_all)
                     examine_all = false;
-                else if(changed_count == 0)
+                else if (changed_count == 0)
                     examine_all = true;
             }
         }
@@ -69,48 +69,48 @@ namespace Clustering {
             double e2 = (a2 > 0 && a2 < cost) ? errors[i2] : ComputeF(v2) - y2;
             double r2 = y2 * e2;
 
-            if(!(r2 < -tolerance && a2 < cost) && !(r2 > tolerance && a2 > 0))
+            if (!(r2 < -tolerance && a2 < cost) && !(r2 > tolerance && a2 > 0))
                 return 0;
 
             // 誤差値の差分を最大化するi1の探索
             i1 = i2;
             double maxerr = 0;
-            for(int i = 0; i < inputs.Length; i++) {
-                if(i == i2)
+            for (int i = 0; i < inputs.Length; i++) {
+                if (i == i2)
                     continue;
 
-                if(a[i] > 0 && a[i] < cost) {
+                if (a[i] > 0 && a[i] < cost) {
                     double e1 = errors[i];
                     double err = Math.Abs(e2 - e1);
-                    if(err > maxerr) {
+                    if (err > maxerr) {
                         maxerr = err;
                         i1 = i;
                     }
                 }
             }
-            if(i1 != i2 && TakeStep(i1, i2))
+            if (i1 != i2 && TakeStep(i1, i2))
                 return 1;
 
             // i1をランダムに決定
             int start = random.Next(inputs.Length);
-            for(i1 = start; i1 < inputs.Length; i1++) {
-                if(a[i1] > 0 && a[i1] < cost)
-                    if(TakeStep(i1, i2))
+            for (i1 = start; i1 < inputs.Length; i1++) {
+                if (a[i1] > 0 && a[i1] < cost)
+                    if (TakeStep(i1, i2))
                         return 1;
             }
-            for(i1 = 0; i1 < start; i1++) {
-                if(a[i1] > 0 && a[i1] < cost)
-                    if(TakeStep(i1, i2))
+            for (i1 = 0; i1 < start; i1++) {
+                if (a[i1] > 0 && a[i1] < cost)
+                    if (TakeStep(i1, i2))
                         return 1;
             }
 
             start = random.Next(inputs.Length);
-            for(i1 = start; i1 < inputs.Length; i1++) {
-                if(TakeStep(i1, i2))
+            for (i1 = start; i1 < inputs.Length; i1++) {
+                if (TakeStep(i1, i2))
                     return 1;
             }
-            for(i1 = 0; i1 < start; i1++) {
-                if(TakeStep(i1, i2))
+            for (i1 = 0; i1 < start; i1++) {
+                if (TakeStep(i1, i2))
                     return 1;
             }
 
@@ -119,7 +119,7 @@ namespace Clustering {
 
         /// <summary>2パラメータの最適化を実行</summary>
         private bool TakeStep(int i1, int i2) {
-            if(i1 == i2)
+            if (i1 == i2)
                 return false;
 
             Vector v1 = inputs[i1], v2 = inputs[i2];
@@ -133,7 +133,7 @@ namespace Clustering {
 
             // a1,a2を最適化
             double clip_l, clip_h;
-            if(y1 != y2) {
+            if (y1 != y2) {
                 clip_l = Math.Max(0, a2_old - a1_old);
                 clip_h = Math.Min(cost, cost + a2_old - a1_old);
             }
@@ -141,7 +141,7 @@ namespace Clustering {
                 clip_l = Math.Max(0, a2_old + a1_old - cost);
                 clip_h = Math.Min(cost, a2_old + a1_old);
             }
-            if(clip_l >= clip_h)
+            if (clip_l >= clip_h)
                 return false;
 
             double k11, k22, k12, eta;
@@ -151,11 +151,11 @@ namespace Clustering {
             eta = k11 + k22 - 2 * k12;
 
             double a1_new, a2_new;
-            if(eta > 0) {
+            if (eta > 0) {
                 a2_new = a2_old - y2 * (e2 - e1) / eta;
-                if(a2_new < clip_l)
+                if (a2_new < clip_l)
                     a2_new = clip_l;
-                else if(a2_new > clip_h)
+                else if (a2_new > clip_h)
                     a2_new = clip_h;
             }
             else {
@@ -165,23 +165,23 @@ namespace Clustering {
                 double f2 = y2 * (e2 + Bias) - a2_old * k22 - s * a1_old * k12;
                 double obj_l = -0.5 * l1 * l1 * k11 - 0.5 * clip_l * clip_l * k22 - s * clip_l * l1 * k12 - l1 * f1 - clip_l * f2;
                 double obj_h = -0.5 * h1 * h1 * k11 - 0.5 * clip_h * clip_h * k22 - s * clip_h * h1 * k12 - h1 * f1 - clip_h * f2;
-                if(obj_l > obj_h + epsilon)
+                if (obj_l > obj_h + epsilon)
                     a2_new = clip_l;
-                else if(obj_l < obj_h - epsilon)
+                else if (obj_l < obj_h - epsilon)
                     a2_new = clip_h;
                 else
                     a2_new = a2_old;
             }
 
-            if(Math.Abs(a2_new - a2_old) < epsilon * (a2_new + a2_old + epsilon))
+            if (Math.Abs(a2_new - a2_old) < epsilon * (a2_new + a2_old + epsilon))
                 return false;
 
             a1_new = a1_old + s * (a2_old - a2_new);
-            if(a1_new < 0) {
+            if (a1_new < 0) {
                 a2_new += s * a1_new;
                 a1_new = 0;
             }
-            else if(a1_new > cost) {
+            else if (a1_new > cost) {
                 double d = a1_new - cost;
                 a2_new += s * d;
                 a1_new = cost;
@@ -210,8 +210,8 @@ namespace Clustering {
             // 誤差値を更新
             double t1 = y1 * (a1_new - a1_old);
             double t2 = y2 * (a2_new - a2_old);
-            for(int i = 0; i < inputs.Length; i++) {
-                if(0 < a[i] && a[i] < cost) {
+            for (int i = 0; i < inputs.Length; i++) {
+                if (0 < a[i] && a[i] < cost) {
                     Vector vi = inputs[i];
                     errors[i] += t1 * kernel(v1, vi) + t2 * kernel(v2, vi) - delta_bias;
                 }
@@ -228,8 +228,8 @@ namespace Clustering {
         /// <summary>F値を計算</summary>
         private double ComputeF(Vector v) {
             double sum = -Bias;
-            for(int i = 0; i < inputs.Length; i++) {
-                if(a[i] > 0)
+            for (int i = 0; i < inputs.Length; i++) {
+                if (a[i] > 0)
                     sum += a[i] * outputs[i] * kernel(inputs[i], v);
             }
             return sum;

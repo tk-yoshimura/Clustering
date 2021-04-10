@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Algebra;
+﻿using Algebra;
+using System.Collections.Generic;
 
 namespace Clustering {
     /// <summary>クラスタリング手法基本クラス</summary>

@@ -1,38 +1,38 @@
-﻿using System;
+﻿using Algebra;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Algebra;
 
 namespace Clustering {
     /// <summary>線形サポートベクタマシン</summary>
     public class LinearSupportVectorMachine : SupportVectorMachine {
-        
+
         /// <summary>コンストラクタ</summary>
         /// <param name="cost">誤識別に対するペナルティの大きさ</param>
-        public LinearSupportVectorMachine(double cost) : base(cost){ }
+        public LinearSupportVectorMachine(double cost) : base(cost) { }
 
         /// <summary>カーネル関数</summary>
         protected override double Kernel(Vector vector1, Vector vector2) {
             double sum = 0;
-            for(int i = 0; i < VectorDim; i++) {
+            for (int i = 0; i < VectorDim; i++) {
                 sum += vector1[i] * vector2[i];
             }
 
             return sum;
         }
     }
-    
+
     /// <summary>ガウシアンサポートベクタマシン</summary>
     public class GaussianSupportVectorMachine : SupportVectorMachine {
         private double sigma, gamma;
 
         /// <param name="cost">誤識別に対するペナルティの大きさ</param>
         /// <param name="sigma">ガウシアン関数の尺度パラメータ</param>
-        public GaussianSupportVectorMachine(double cost, double sigma) : base(cost){
+        public GaussianSupportVectorMachine(double cost, double sigma) : base(cost) {
             this.Sigma = sigma;
         }
-        
+
         /// <summary>ガウシアン関数の尺度パラメータ</summary>
         public double Sigma {
             get {
@@ -47,7 +47,7 @@ namespace Clustering {
         /// <summary>カーネル関数</summary>
         protected override double Kernel(Vector vector1, Vector vector2) {
             double norm = 0;
-            for(int i = 0; i < vector1.Dim; i++) {
+            for (int i = 0; i < vector1.Dim; i++) {
                 double d = vector1[i] - vector2[i];
                 norm += d * d;
             }
@@ -55,7 +55,7 @@ namespace Clustering {
             return Math.Exp(-gamma * norm);
         }
     }
-    
+
     /// <summary>サポートベクタマシン</summary>
     public abstract class SupportVectorMachine : IClusteringMethod {
         protected class WeightVector {
@@ -70,14 +70,14 @@ namespace Clustering {
         /// <summary>コンストラクタ</summary>
         /// <param name="cost">誤識別に対するペナルティの大きさ</param>
         public SupportVectorMachine(double cost) {
-            if(!(cost > 0)) {
-                throw new ArgumentException(nameof(cost));
+            if (!(cost > 0)) {
+                throw new ArgumentOutOfRangeException(nameof(cost));
             }
 
             Initialize();
             this.cost = cost;
         }
-        
+
         /// <summary>データクラス数</summary>
         /// <remarks>SVMは常に2</remarks>
         public int GroupCount => 2;
@@ -112,20 +112,20 @@ namespace Clustering {
         public IEnumerable<int> Classify(IEnumerable<Vector> vectors, double threshold) {
             return vectors.Select((vector) => Classify(vector, threshold));
         }
-        
+
         /// <summary>単一サンプルの識別値</summary>
         public double ClassifyRaw(Vector vector) {
-            if(vector == null || vector.Dim != VectorDim) {
-                throw new ArgumentException();
+            if (vector == null || vector.Dim != VectorDim) {
+                throw new ArgumentException(nameof(vector));
             }
 
             double s = -bias;
-            foreach(var support_vector in support_vectors) {
+            foreach (var support_vector in support_vectors) {
                 s += support_vector.Weight * Kernel(vector, support_vector.Vector);
             }
             return s;
         }
-        
+
         /// <summary>複数サンプルの識別値</summary>
         public IEnumerable<double> ClassifyRaw(IEnumerable<Vector> vectors) {
             return vectors.Select((vector) => ClassifyRaw(vector));
@@ -148,7 +148,7 @@ namespace Clustering {
             // ベクトル
             List<Vector> positive_vectors = vectors_groups[0];
             List<Vector> negative_vectors = vectors_groups[1];
-            List<Vector> inputs = new List<Vector>();
+            List<Vector> inputs = new();
             inputs.AddRange(positive_vectors);
             inputs.AddRange(negative_vectors);
 
@@ -161,10 +161,10 @@ namespace Clustering {
 
             bias = smo.Bias;
             ReadOnlyCollection<double> vector_weight = smo.VectorWeight;
-            
+
             //サポートベクターの格納
-            for(int i = 0; i < vector_weight.Count; i++) {
-                if(vector_weight[i] > epsilon) {
+            for (int i = 0; i < vector_weight.Count; i++) {
+                if (vector_weight[i] > epsilon) {
                     var wvec = new WeightVector { Weight = vector_weight[i] * outputs[i], Vector = (Vector)inputs[i].Clone() };
 
                     support_vectors.Add(wvec);
@@ -183,21 +183,21 @@ namespace Clustering {
 
         /// <summary>サンプルの正当性を検証</summary>
         private void ValidateSample(int vector_dim, List<Vector>[] vectors_groups) {
-            if(vector_dim < 1) {
+            if (vector_dim < 1) {
                 throw new ArgumentException(nameof(vector_dim));
             }
-            if(vectors_groups == null) {
+            if (vectors_groups == null) {
                 throw new ArgumentNullException(nameof(vectors_groups));
             }
-            if(vectors_groups.Length != GroupCount) {
+            if (vectors_groups.Length != GroupCount) {
                 throw new ArgumentException(nameof(vectors_groups));
             }
-            foreach(var vectors in vectors_groups) {
-                if(vectors.Count < 1) {
+            foreach (var vectors in vectors_groups) {
+                if (vectors.Count < 1) {
                     throw new ArgumentException(nameof(vectors_groups));
                 }
-                foreach(var vector in vectors) {
-                    if(vector.Dim != vector_dim) {
+                foreach (var vector in vectors) {
+                    if (vector.Dim != vector_dim) {
                         throw new ArgumentException(nameof(vectors_groups));
                     }
                 }
