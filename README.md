@@ -7,7 +7,7 @@
  .NET 6.0
  
 ## Install
-[Download DLL](https://github.com/tk-yoshimura/Clustering/releases)
+[Download DLL](https://github.com/tk-yoshimura/Clustering/releases)  
 [Download Nuget package](https://www.nuget.org/packages/tyoshimura.clustering/)
 
 ## Usage
