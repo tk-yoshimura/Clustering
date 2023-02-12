@@ -1,5 +1,5 @@
 # Clustering
- Clustering - svm, kmeans 
+ Clustering - svm, kmeans
  
 ![sample](https://github.com/tk-yoshimura/Clustering/blob/main/figures/gaussiansvm_random_cost100_svm.png)  
 
