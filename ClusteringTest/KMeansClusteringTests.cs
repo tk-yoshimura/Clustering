@@ -11,30 +11,30 @@ namespace ClusteringTest {
 
         [TestMethod()]
         public void PlotTest() {
-            Random random = new Random(9);
+            Random random = new(9);
 
             List<Vector> vectors = new();
 
             Vector center;
 
-            center = new Vector(2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
+            center = (2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
             for (int i = 0; i < 25; i++) {
-                vectors.Add(center + new Vector(0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
+                vectors.Add(center + (0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
             }
-            center = new Vector(2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
+            center = (2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
             for (int i = 0; i < 20; i++) {
-                vectors.Add(center + new Vector(0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
+                vectors.Add(center + (0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
             }
-            center = new Vector(2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
+            center = (2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
             for (int i = 0; i < 20; i++) {
-                vectors.Add(center + new Vector(0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
+                vectors.Add(center + (0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
             }
-            center = new Vector(2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
+            center = (2 * random.NextDouble() - 1, 2 * random.NextDouble() - 1);
             for (int i = 0; i < 25; i++) {
-                vectors.Add(center + new Vector(0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
+                vectors.Add(center + (0.8 * random.NextDouble() - 0.4, 0.8 * random.NextDouble() - 0.4));
             }
 
-            KMeansClustering kmean = new KMeansClustering(4);
+            KMeansClustering kmean = new(group_count: 4);
             kmean.Learn(Array.AsReadOnly(vectors.ToArray()));
 
             Vis.Plot(kmean, Array.AsReadOnly(vectors.ToArray()), $"../../testplot/kmeans.png");
@@ -42,7 +42,7 @@ namespace ClusteringTest {
 
         [TestMethod()]
         public void InvalidCreateTest() {
-            KMeansClustering kmean = new KMeansClustering(4);
+            KMeansClustering kmean = new(group_count: 4);
 
             Assert.ThrowsException<ArgumentException>(() => {
                 kmean.Learn();

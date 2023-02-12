@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 namespace ClusteringTest {
     public static class Vis {
         public static void Plot(KMeansClustering kmean, ReadOnlyCollection<Vector> vectors, string filepath) {
-            Bitmap image = new Bitmap(500, 500);
+            Bitmap image = new(500, 500);
 
             Color[] colors = new Color[] { Color.FromArgb(255, 128, 128), Color.FromArgb(128, 128, 255), Color.FromArgb(128, 255, 128), Color.FromArgb(255, 255, 128) };
 
@@ -15,7 +15,7 @@ namespace ClusteringTest {
                     double vx = (x - image.Width / 2) / (image.Width * 0.4);
                     double vy = (y - image.Height / 2) / (image.Height * 0.4);
 
-                    int cluster_index = kmean.Classify(new Vector(vx, vy));
+                    int cluster_index = kmean.Classify((vx, vy));
 
                     image.SetPixel(x, y, colors[cluster_index]);
                 }
@@ -51,7 +51,7 @@ namespace ClusteringTest {
         }
 
         public static void Plot(SupportVectorMachine svm, ReadOnlyCollection<Vector> positive_vectors, ReadOnlyCollection<Vector> negative_vectors, string filepath) {
-            Bitmap image = new Bitmap(500, 500);
+            Bitmap image = new(500, 500);
 
             Func<double, Color> color_func = (s) => {
                 int d = (int)((Math.Abs(s) >= 1) ? 100 : (256 - 128 * Math.Abs(s)));
@@ -68,7 +68,7 @@ namespace ClusteringTest {
                     double vx = (x - image.Width / 2) / (image.Width * 0.4);
                     double vy = (y - image.Height / 2) / (image.Height * 0.4);
 
-                    double s = svm.ClassifyRaw(new Vector(vx, vy));
+                    double s = svm.ClassifyRaw((vx, vy));
 
                     image.SetPixel(x, y, color_func(s));
                 }

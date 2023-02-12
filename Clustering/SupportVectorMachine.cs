@@ -57,14 +57,10 @@ namespace Clustering {
 
     /// <summary>サポートベクタマシン</summary>
     public abstract class SupportVectorMachine : IClusteringMethod {
-        protected class WeightVector {
-            public Vector Vector { get; set; }
-            public double Weight { get; set; }
-        }
 
         private double bias;
         private readonly double cost;
-        List<WeightVector> support_vectors;
+        List<(Vector vector, double weight)> support_vectors;
 
         /// <summary>コンストラクタ</summary>
         /// <param name="cost">誤識別に対するペナルティの大きさ</param>
@@ -120,7 +116,7 @@ namespace Clustering {
 
             double s = -bias;
             foreach (var support_vector in support_vectors) {
-                s += support_vector.Weight * Kernel(vector, support_vector.Vector);
+                s += support_vector.weight * Kernel(vector, support_vector.vector);
             }
             return s;
         }
@@ -163,9 +159,7 @@ namespace Clustering {
             //サポートベクターの格納
             for (int i = 0; i < vector_weight.Count; i++) {
                 if (vector_weight[i] > epsilon) {
-                    var wvec = new WeightVector { Weight = vector_weight[i] * outputs[i], Vector = (Vector)inputs[i].Clone() };
-
-                    support_vectors.Add(wvec);
+                    support_vectors.Add(((Vector)inputs[i].Clone(), vector_weight[i] * outputs[i]));
                 }
             }
         }
@@ -176,7 +170,7 @@ namespace Clustering {
         /// <summary>初期化</summary>
         public void Initialize() {
             bias = 0;
-            support_vectors = new List<WeightVector>();
+            support_vectors = new List<(Vector, double)>();
         }
     }
 }
