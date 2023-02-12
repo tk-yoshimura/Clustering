@@ -8,9 +8,7 @@
  
 ## Install
 [Download DLL](https://github.com/tk-yoshimura/Clustering/releases)
-
-- To install, just import the DLL.
-- This library does not change the environment at all.
+[Download Nuget package](https://www.nuget.org/packages/tyoshimura.clustering/)
 
 ## Usage
 ```csharp
