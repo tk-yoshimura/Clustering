@@ -1,5 +1,4 @@
-﻿using Algebra;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 
 namespace Clustering {

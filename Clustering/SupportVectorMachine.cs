@@ -1,5 +1,4 @@
-﻿using Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -116,7 +115,7 @@ namespace Clustering {
         /// <summary>単一サンプルの識別値</summary>
         public double ClassifyRaw(Vector vector) {
             if (vector == null || vector.Dim != VectorDim) {
-                throw new ArgumentException(nameof(vector));
+                throw new ArgumentException("Mismatch vector dim.", nameof(vector));
             }
 
             double s = -bias;
@@ -132,22 +131,21 @@ namespace Clustering {
         }
 
         /// <summary>学習</summary>
-        /// <param name="vector_dim">サンプルベクタ次元数</param>
         /// <param name="vectors_groups">データクラスごとのサンプルベクタ集合</param>
         /// <remarks>サンプルベクタ集合は正例と負例の2つ</remarks>
-        public void Learn(int vector_dim, params List<Vector>[] vectors_groups) {
+        public void Learn(params ReadOnlyCollection<Vector>[] vectors_groups) {
             Initialize();
-            ValidateSample(vector_dim, vectors_groups);
+            ClusteringMethodUtil.ValidateSample(GroupCount, vectors_groups);
 
             // サポートベクターとなる最小のベクトル重み
             double epsilon = 1.0e-3;
 
             // ベクトルの次元数
-            VectorDim = vector_dim;
+            VectorDim = vectors_groups[0][0].Dim;
 
             // ベクトル
-            List<Vector> positive_vectors = vectors_groups[0];
-            List<Vector> negative_vectors = vectors_groups[1];
+            ReadOnlyCollection<Vector> positive_vectors = vectors_groups[0];
+            ReadOnlyCollection<Vector> negative_vectors = vectors_groups[1];
             List<Vector> inputs = new();
             inputs.AddRange(positive_vectors);
             inputs.AddRange(negative_vectors);
@@ -179,29 +177,6 @@ namespace Clustering {
         public void Initialize() {
             bias = 0;
             support_vectors = new List<WeightVector>();
-        }
-
-        /// <summary>サンプルの正当性を検証</summary>
-        private void ValidateSample(int vector_dim, List<Vector>[] vectors_groups) {
-            if (vector_dim < 1) {
-                throw new ArgumentException(nameof(vector_dim));
-            }
-            if (vectors_groups == null) {
-                throw new ArgumentNullException(nameof(vectors_groups));
-            }
-            if (vectors_groups.Length != GroupCount) {
-                throw new ArgumentException(nameof(vectors_groups));
-            }
-            foreach (var vectors in vectors_groups) {
-                if (vectors.Count < 1) {
-                    throw new ArgumentException(nameof(vectors_groups));
-                }
-                foreach (var vector in vectors) {
-                    if (vector.Dim != vector_dim) {
-                        throw new ArgumentException(nameof(vectors_groups));
-                    }
-                }
-            }
         }
     }
 }

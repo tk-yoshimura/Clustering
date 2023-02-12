@@ -1,6 +1,6 @@
-﻿using Algebra;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Clustering {
@@ -18,7 +18,7 @@ namespace Clustering {
         /// <param name="group_count">データクラス数</param>
         public KMeansClustering(int group_count) {
             if (group_count <= 1) {
-                throw new ArgumentException(nameof(group_count));
+                throw new ArgumentOutOfRangeException(nameof(group_count));
             }
 
             this.GroupCount = group_count;
@@ -50,14 +50,17 @@ namespace Clustering {
         }
 
         /// <summary>学習</summary>
-        /// <param name="vector_dim">サンプルベクタ次元数</param>
         /// <param name="vectors_groups">データクラスごとのサンプルベクタ集合</param>
-        public void Learn(int vector_dim, params List<Vector>[] vectors_groups) {
+        public void Learn(params ReadOnlyCollection<Vector>[] vectors_groups) {
             Initialize();
-            ValidateSample(vector_dim, vectors_groups);
+            ClusteringMethodUtil.ValidateSample(1, vectors_groups);
+
+            if (vectors_groups[0].Count < GroupCount) {
+                throw new ArgumentException("Vector count less than the cluster count.", nameof(vectors_groups));
+            }
 
             center_vectors = new Vector[GroupCount];
-            VectorDim = vector_dim;
+            VectorDim = vectors_groups[0][0].Dim;
 
             Random random = new(0);
             var vectors = vectors_groups[0].ToArray();
@@ -151,29 +154,6 @@ namespace Clustering {
             }
 
             return nearest_cluster_index;
-        }
-
-        /// <summary>サンプルの正当性を検証</summary>
-        private void ValidateSample(int vector_dim, List<Vector>[] vectors_groups) {
-            if (vector_dim < 1) {
-                throw new ArgumentException(nameof(vector_dim));
-            }
-            if (vectors_groups == null) {
-                throw new ArgumentNullException(nameof(vectors_groups));
-            }
-            if (vectors_groups.Length != 1) {
-                throw new ArgumentException(nameof(vectors_groups));
-            }
-            foreach (var vectors in vectors_groups) {
-                if (vectors.Count < GroupCount) {
-                    throw new ArgumentException(nameof(vectors_groups));
-                }
-                foreach (var vector in vectors) {
-                    if (vector.Dim != vector_dim) {
-                        throw new ArgumentException(nameof(vectors_groups));
-                    }
-                }
-            }
         }
     }
 }

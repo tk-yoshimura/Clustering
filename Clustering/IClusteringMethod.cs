@@ -1,5 +1,5 @@
-﻿using Algebra;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Clustering {
     /// <summary>クラスタリング手法基本クラス</summary>
@@ -16,7 +16,7 @@ namespace Clustering {
         /// <summary>学習</summary>
         /// <param name="vector_dim">サンプルベクタ次元数</param>
         /// <param name="vectors_groups">データクラスごとのサンプルベクタ集合</param>
-        void Learn(int vector_dim, params List<Vector>[] vectors_groups);
+        void Learn(params ReadOnlyCollection<Vector>[] vectors_groups);
 
         /// <summary>初期化</summary>
         void Initialize();
