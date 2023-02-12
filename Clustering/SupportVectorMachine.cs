@@ -13,12 +13,9 @@ namespace Clustering {
 
         /// <summary>カーネル関数</summary>
         protected override double Kernel(Vector vector1, Vector vector2) {
-            double sum = 0;
-            for (int i = 0; i < VectorDim; i++) {
-                sum += vector1[i] * vector2[i];
-            }
+            double dot = Vector.Dot(vector1, vector2);
 
-            return sum;
+            return dot;
         }
     }
 
@@ -45,11 +42,7 @@ namespace Clustering {
 
         /// <summary>カーネル関数</summary>
         protected override double Kernel(Vector vector1, Vector vector2) {
-            double norm = 0;
-            for (int i = 0; i < vector1.Dim; i++) {
-                double d = vector1[i] - vector2[i];
-                norm += d * d;
-            }
+            double norm = (vector1 - vector2).SquareNorm;
 
             return Math.Exp(-gamma * norm);
         }
@@ -115,8 +108,8 @@ namespace Clustering {
             }
 
             double s = -bias;
-            foreach (var support_vector in support_vectors) {
-                s += support_vector.weight * Kernel(vector, support_vector.vector);
+            foreach ((Vector v, double w) in support_vectors) {
+                s += w * Kernel(vector, v);
             }
             return s;
         }

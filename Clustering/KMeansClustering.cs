@@ -7,10 +7,6 @@ namespace Clustering {
 
     /// <summary>k-means++法</summary>
     public class KMeansClustering : IClusteringMethod {
-        protected class LabelVector {
-            public Vector Vector { get; set; }
-            public int Label { get; set; }
-        }
 
         Vector[] center_vectors;
 
@@ -98,7 +94,7 @@ namespace Clustering {
             }
 
             // クラスタ割当て
-            var labeled_vectors = vectors.Select((vector) => new LabelVector { Vector = vector, Label = NearestVector(vector) }).ToArray();
+            (Vector vector, int label)[] labeled_vectors = vectors.Select((vector) => (vector, NearestVector(vector))).ToArray();
             bool ischanged_label = true;
 
             // k-mean収束ループ
@@ -111,9 +107,9 @@ namespace Clustering {
 
                 int[] label_count = new int[center_vectors.Length];
 
-                foreach (var vector in labeled_vectors) {
-                    center_vectors[vector.Label] += vector.Vector;
-                    label_count[vector.Label]++;
+                foreach ((Vector vector, int label) in labeled_vectors) {
+                    center_vectors[label] += vector;
+                    label_count[label]++;
                 }
 
                 for (int cluster_index = 0; cluster_index < center_vectors.Length; cluster_index++) {
@@ -121,16 +117,16 @@ namespace Clustering {
                 }
 
                 for (int vector_index = 0; vector_index < vector_count; vector_index++) {
-                    var labeled_vector = labeled_vectors[vector_index];
+                    (Vector vector, int label) = labeled_vectors[vector_index];
 
-                    int label_old = labeled_vector.Label;
-                    int label_new = NearestVector(labeled_vector.Vector);
+                    int label_old = label;
+                    int label_new = NearestVector(vector);
 
                     if (label_old != label_new) {
                         ischanged_label = true;
                     }
 
-                    labeled_vector.Label = label_new;
+                    labeled_vectors[vector_index].label = label_new;
                 }
             }
         }

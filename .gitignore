@@ -55,3 +55,4 @@ nugetpack.bat
 /**/*.nupkg
 
 # Safelist
+!figures/gaussiansvm_random_cost100_svm.png
