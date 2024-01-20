@@ -8,7 +8,7 @@
  
 ## Install
 [Download DLL](https://github.com/tk-yoshimura/Clustering/releases)  
-[Download Nuget package](https://www.nuget.org/packages/tyoshimura.clustering/)
+[Download Nuget](https://www.nuget.org/packages/tyoshimura.clustering/)
 
 ## Usage
 ```csharp
@@ -23,4 +23,4 @@ int posneg = svm.Classify(vector, threshold: 0.1);
 
 ## Author
 
-[tk-yoshimura](https://github.com/tk-yoshimura)
+[T.Yoshimura](https://github.com/tk-yoshimura)
