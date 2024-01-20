@@ -6,7 +6,7 @@ namespace Clustering {
     public partial class Vector {
         /// <summary>結合</summary>
         public static Vector Concat(params object[] blocks) {
-            List<double> v = new();
+            List<double> v = [];
 
             foreach (object obj in blocks) {
                 if (obj is Vector vector) {

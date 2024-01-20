@@ -4,7 +4,7 @@
 ![sample](https://github.com/tk-yoshimura/Clustering/blob/main/figures/gaussiansvm_random_cost100_svm.png)  
 
 ## Requirement
- .NET 6.0
+ .NET 8.0
  
 ## Install
 [Download DLL](https://github.com/tk-yoshimura/Clustering/releases)  

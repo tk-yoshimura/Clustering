@@ -4,7 +4,7 @@ namespace Clustering {
     ///<summary>ベクトルクラス</summary>
     public partial class Vector {
         public static implicit operator Vector((double x, double y) v) {
-            return new Vector(new double[] { v.x, v.y }, cloning: false);
+            return new Vector([v.x, v.y], cloning: false);
         }
 
         public void Deconstruct(out double x, out double y) {
@@ -16,7 +16,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double x, double y, double z) v) {
-            return new Vector(new double[] { v.x, v.y, v.z }, cloning: false);
+            return new Vector([v.x, v.y, v.z], cloning: false);
         }
 
         public void Deconstruct(out double x, out double y, out double z) {
@@ -28,7 +28,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double x, double y, double z, double w) v) {
-            return new Vector(new double[] { v.x, v.y, v.z, v.w }, cloning: false);
+            return new Vector([v.x, v.y, v.z, v.w], cloning: false);
         }
 
         public void Deconstruct(out double x, out double y, out double z, out double w) {
@@ -40,7 +40,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double e0, double e1, double e2, double e3, double e4) v) {
-            return new Vector(new double[] { v.e0, v.e1, v.e2, v.e3, v.e4 }, cloning: false);
+            return new Vector([v.e0, v.e1, v.e2, v.e3, v.e4], cloning: false);
         }
 
         public void Deconstruct(out double e0, out double e1, out double e2, out double e3, out double e4) {
@@ -52,7 +52,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double e0, double e1, double e2, double e3, double e4, double e5) v) {
-            return new Vector(new double[] { v.e0, v.e1, v.e2, v.e3, v.e4, v.e5 }, cloning: false);
+            return new Vector([v.e0, v.e1, v.e2, v.e3, v.e4, v.e5], cloning: false);
         }
 
         public void Deconstruct(out double e0, out double e1, out double e2, out double e3, out double e4, out double e5) {
@@ -64,7 +64,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double e0, double e1, double e2, double e3, double e4, double e5, double e6) v) {
-            return new Vector(new double[] { v.e0, v.e1, v.e2, v.e3, v.e4, v.e5, v.e6 }, cloning: false);
+            return new Vector([v.e0, v.e1, v.e2, v.e3, v.e4, v.e5, v.e6], cloning: false);
         }
 
         public void Deconstruct(out double e0, out double e1, out double e2, out double e3, out double e4, out double e5, out double e6) {
@@ -76,7 +76,7 @@ namespace Clustering {
         }
 
         public static implicit operator Vector((double e0, double e1, double e2, double e3, double e4, double e5, double e6, double e7) v) {
-            return new Vector(new double[] { v.e0, v.e1, v.e2, v.e3, v.e4, v.e5, v.e6, v.e7 }, cloning: false);
+            return new Vector([v.e0, v.e1, v.e2, v.e3, v.e4, v.e5, v.e6, v.e7], cloning: false);
         }
 
         public void Deconstruct(out double e0, out double e1, out double e2, out double e3, out double e4, out double e5, out double e6, out double e7) {

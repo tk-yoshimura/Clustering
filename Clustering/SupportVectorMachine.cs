@@ -135,9 +135,7 @@ namespace Clustering {
             // ベクトル
             ReadOnlyCollection<Vector> positive_vectors = vectors_groups[0];
             ReadOnlyCollection<Vector> negative_vectors = vectors_groups[1];
-            List<Vector> inputs = new();
-            inputs.AddRange(positive_vectors);
-            inputs.AddRange(negative_vectors);
+            List<Vector> inputs = [.. positive_vectors, .. negative_vectors];
 
             // ラベル
             double[] outputs = (new double[inputs.Count]).Select((_, i) => i < positive_vectors.Count ? +1.0 : -1.0).ToArray();
